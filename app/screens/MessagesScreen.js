@@ -11,20 +11,20 @@ import Screen from "../components/Screen";
 const initialMessages = [
   {
     id: 1,
-    title: "T1",
-    description: "D1",
+    title: "Mr. Khan",
+    description: "Some random text description.",
     image: require("../assets/myPic.jpg"),
   },
   {
     id: 2,
-    title: "T2",
-    description: "D3",
+    title: "Anwar Ali",
+    description: "Some random text description.",
     image: require("../assets/myPic.jpg"),
   },
   {
     id: 3,
-    title: "T3",
-    description: "D3",
+    title: "Shahid",
+    description: "Some random text description.",
     image: require("../assets/myPic.jpg"),
   },
 ];

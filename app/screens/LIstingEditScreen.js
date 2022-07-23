@@ -9,6 +9,7 @@ import {
   SubmitButton,
 } from "../components/forms";
 import Screen from "../components/Screen";
+import listingsApi from "../api/listings";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -24,6 +25,14 @@ const categories = [
 ];
 
 export default function LIstingEditScreen() {
+  const handleSubmit = async (listing) => {
+    // console.log(listing);
+    const result = await listingsApi.addListings(listing);
+    console.log(result);
+    // if (!result.data) return alert("Could not save the listing.");
+    // alert("Listing Added Successfully...");
+  };
+
   return (
     <Screen style={styles.screen}>
       <AppForm
@@ -33,7 +42,7 @@ export default function LIstingEditScreen() {
           description: "",
           category: null,
         }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
         <AppFormField maxLength={255} name="title" placeholder="Title" />

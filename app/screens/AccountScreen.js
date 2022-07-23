@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import ListItem from "../components/lists/ListItem";
 
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
+import AuthContext from "../auth/context";
+import authStorage from "../auth/storage";
 
 // List item array
 const listingsData = [
@@ -23,16 +25,24 @@ const listingsData = [
       name: "email",
       backgroundColor: colors.secondary,
     },
+    targetScreen: "Messages",
   },
 ];
 
-export default function AccountScreen() {
+export default function AccountScreen({ navigation }) {
+  const { user, setUser } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    setUser(null);
+    authStorage.removeToken();
+  };
+
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
-          title="Wali Ullah"
-          subTitle="waliullah0540@gmail.com"
+          title={user.name}
+          subTitle={user.email}
           image={require("../assets/myPic.jpg")}
         />
       </View>
@@ -49,6 +59,7 @@ export default function AccountScreen() {
                   backgroundColor={item.icon.backgroundColor}
                 />
               }
+              onPress={() => navigation.navigate(item.targetScreen)}
             />
           )}
         />
@@ -57,6 +68,7 @@ export default function AccountScreen() {
         <ListItem
           title={"Log Out"}
           IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+          onPress={handleLogout}
         />
       </View>
     </Screen>

@@ -1,29 +1,52 @@
-import { StyleSheet, FlatList } from "react-native";
-import React from "react";
+import { StyleSheet, FlatList, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { ActivityIndicator } from "react-native";
 
 import Screen from "../components/Screen";
 import Card from "../components/Card";
 import colors from "../config/colors";
-import ListingDetailsScreen from "./ListingDetailsScreen";
-
-const listings = [
-  {
-    id: 1,
-    title: "Red Jacket for Sale",
-    price: "100",
-    image: require("../assets/jacket.jpg"),
-  },
-  {
-    id: 2,
-    title: "Couch in great condition",
-    price: "400",
-    image: require("../assets/couch.jpg"),
-  },
-];
+import routes from "../navigation/routes";
+import listingsApi from "../api/listings";
+import AppText from "../components/AppText";
+import AppButton from "../components/AppButton";
 
 function ListingsScreen({ navigation: { navigate } }) {
+  const [listings, setListings] = useState([]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    loadListings();
+  }, []);
+
+  // function to load listings data
+  const loadListings = async () => {
+    setLoading(true);
+    const response = await listingsApi.getListings();
+    // console.log(response.data);
+    setLoading(false);
+
+    if (!response.ok) return setError(true);
+
+    setError(false);
+    setListings(response.data);
+  };
+
   return (
     <Screen style={styles.screen}>
+      {error && (
+        <>
+          <AppText>Couldn't retrive listings</AppText>
+          <AppButton title="Try again" onPress={loadListings} />
+        </>
+      )}
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator
+          animating={loading}
+          size="large"
+          color={colors.primary}
+        />
+      </View>
       <FlatList
         data={listings}
         keyExtractor={(listing) => listing.id.toString()}
@@ -31,8 +54,8 @@ function ListingsScreen({ navigation: { navigate } }) {
           <Card
             title={item.title}
             price={"$" + item.price}
-            image={item.image}
-            onPress={() => navigate("ListingDetails", item)}
+            imageUrl={item.images[0].url}
+            onPress={() => navigate(routes.LISTING_DETAILS, item)}
           />
         )}
       />
@@ -44,6 +67,10 @@ const styles = StyleSheet.create({
   screen: {
     padding: 10,
     backgroundColor: colors.light,
+  },
+  loadingIndicator: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
