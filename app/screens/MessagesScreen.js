@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 
 import {
   ListItem,
@@ -39,7 +39,7 @@ function MessagesScreen(props) {
     setMessages(newMessages);
   };
   return (
-    <Screen>
+    <View>
       <FlatList
         data={messages}
         keyExtractor={(message) => message.id.toString()}
@@ -66,7 +66,7 @@ function MessagesScreen(props) {
           ]);
         }}
       />
-    </Screen>
+    </View>
   );
 }
 

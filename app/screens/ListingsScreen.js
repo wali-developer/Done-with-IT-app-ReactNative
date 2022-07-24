@@ -1,6 +1,5 @@
-import { StyleSheet, FlatList, View } from "react-native";
+import { StyleSheet, FlatList, View, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator } from "react-native";
 
 import Screen from "../components/Screen";
 import Card from "../components/Card";
@@ -23,7 +22,6 @@ function ListingsScreen({ navigation: { navigate } }) {
   const loadListings = async () => {
     setLoading(true);
     const response = await listingsApi.getListings();
-    // console.log(response.data);
     setLoading(false);
 
     if (!response.ok) return setError(true);
